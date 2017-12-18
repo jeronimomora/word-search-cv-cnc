@@ -19,20 +19,19 @@
     <h2 align="middle">Jeronimo Mora</h2>
 
     <div class="padded">
-        <p>Having finished the fall semester I wanted to do a fun little project to relax. I have a 3D printer and I figured I could use it to do something interesting.</p>
-        <p>I had some word search puzzles so I figured I could write some software to solve the puzzles and then create gcode so my 3D printer could circle the words if I attached a sharpie to it.</p>
-        <p>It took me a few days but I got it working. There are a few changes I'd like to make in the future so this is likely a work in progress.</p>
+        <p>Having finished the fall semester I wanted to do a fun little project to relax. I have a 3D printer and I figured I could use it to do something interesting.
+        I had some word search puzzles so I figured I could write some software to solve the puzzles and then create gcode so my 3D printer could circle the words if I attached a sharpie to it.
+        It took me a few days but I got it working. There are a few changes I'd like to make in the future so this is likely a work in progress.</p>
 
     <h2 align="middle">Part 1: Word and Letter Extraction</h2>
-        <p>In order to extract the letters from the pages, I needed to use some kind of character recognition software. Luckily, I stumbled upon Tesseract OCR.</p>
-        <p>Tesseract OCR is character recognition software that was originally developed by HP and then managed by Google. Out of the box, it has fairly strong performance so I decided that using it was preferable to training my own model.</p>
-        <p>It CAN be quite fragile, but I didn't want to optimize it for my particular puzzle so I just made sure to pre-process and make sure my pictures had optimal lighting.</p>
+        <p>In order to extract the letters from the pages, I needed to use some kind of character recognition software. Luckily, I stumbled upon Tesseract OCR. Tesseract OCR is character recognition software that was originally developed by HP and then managed by Google. 
+            Out of the box, it has fairly strong performance so I decided that using it was preferable to training my own model. It CAN be quite fragile, but I didn't want to optimize it for my particular puzzle so I just made sure to pre-process and make sure my pictures had optimal lighting.</p>
         
         <br>
         
-        <p>For both pictures (search words and puzzle), I made sure they were aligned vertically. This can be automated by using OpenCV but I did it manually.</p>
-        <p>I also cropped the picture so only the words and letters of interest were present. Stray lines and boxes seemed to harm performance.</p>
-        <p>I used some code that I found <"a href=https://www.pyimagesearch.com/2017/07/10/using-tesseract-ocr-python/">online</a> to do thresholding and erosion of the image so Tesseract could find the letters more easily.</p>
+        <p>For both pictures (search words and puzzle), I made sure they were aligned vertically. This can be automated by using OpenCV but I did it manually. 
+        I also cropped the picture so only the words and letters of interest were present. Stray lines and boxes seemed to harm performance. 
+        I used some code that I found <a href="https://www.pyimagesearch.com/2017/07/10/using-tesseract-ocr-python/">online</a> to do thresholding and erosion of the image so Tesseract could find the letters more easily.</p>
         
         
         
@@ -40,14 +39,16 @@
             <table style="width=100%">
                 <tr>
                     <td align="middle">
-                    <img src="images/example_image.jpg" width="800px" />
+                    <img src="images/puzzle.jpg" width="800px" />
+                    <figcaption align="middle">Results Caption: include at least one png of svg/basic/test2.svg in this section</figcaption>
+                </tr>
+                <tr>
+                    <td align="middle">
+                    <img src="images/puzzle_erode.png" width="800px" />
                     <figcaption align="middle">Results Caption: include at least one png of svg/basic/test2.svg in this section</figcaption>
                 </tr>
             </table>
         </div>
-        <p>Here is an example of how to include a simple formula:</p>
-        <p align="middle"><pre align="middle">a^2 + b^2 = c^2</pre></p>
-        <p>or, alternatively, you can include an image of a LaTex formula.</p>
 
     <h2 align="middle">Part 2: Rasterizing single-color triangles</h2>
         <p>Describe what you did in Part 2. Show your result here. Explain any bugs you had to work through, with pictures if possible. Explain any special optimizations you did beyond simple bounding box triangle rasterization, with a timing comparison table (we suggest using the c++ clock() function around the svg.draw() command in DrawRend::redraw() to compare millisecond timings with your various optimizations off and on).</p>
