@@ -15,17 +15,27 @@
 </head>
 <body>
 <br />
-<h1 align="middle">Computer Vision 3D Printer Word Search Solver</h1>
+<h1 align="middle">3D Printer Word Search Solver Using Computer Vision and AI</h1>
     <h2 align="middle">Jeronimo Mora</h2>
 
     <div class="padded">
-        <p>Use this section to write an overview of the assignment. All of the text in your write-up should be <em>in your own words</em>. If you need to add additional HTML features to this document, you can search the <a href="http://www.w3schools.com/">http://www.w3schools.com/</a> website for instructions. To edit the HTML, you can just copy and paste existing chunks and fill in the text and image file names appropriately.</p>
-        <o>The website writeup is intended to be a self-contained walkthrough of the assignment: we want this to be a piece of work which showcases your understanding of relevant concepts through both rendered images as well as written explanations about what you did to complete each part of the assignment. Try to be as clear and organized as possible when writing about your own output files or extensions to the assignment. We want to understand what you've achieved and how you've done it!</p> 
-        <p>If you are well-versed in web development, feel free to ditch this template and make a better looking page. Just make sure that you include all the components as we've laid them out here. </p>
-        <p>For required images, keep the image size fixed at the native width of the file to avoid artifacts. You might want to adjust your rasterizester window size down to be less than 1000 pixels wide if you are working on a retina display screen, since the 1920 by 1280 images will be enormous on normal monitors.</p>
+        <p>Having finished the fall semester I wanted to do a fun little project to relax. I have a 3D printer and I figured I could use it to do something interesting.</p>
+        <p>I had some word search puzzles so I figured I could write some software to solve the puzzles and then create gcode so my 3D printer could circle the words if I attached a sharpie to it.</p>
+        <p>It took me a few days but I got it working. There are a few changes I'd like to make in the future so this is likely a work in progress.</p>
 
-    <h2 align="middle">Part 1: Rasterizing Lines</h2>
-        <p>Describe what you did in Part 1. Show your result here. You could talk about which line rasterizing algorithm you used, any issues you ran into and had to debug (with example images), and any clever modifications you made to the algorithm to reduce the number of special cases.</p>
+    <h2 align="middle">Part 1: Word and Letter Extraction</h2>
+        <p>In order to extract the letters from the pages, I needed to use some kind of character recognition software. Luckily, I stumbled upon Tesseract OCR.</p>
+        <p>Tesseract OCR is character recognition software that was originally developed by HP and then managed by Google. Out of the box, it has fairly strong performance so I decided that using it was preferable to training my own model.</p>
+        <p>It CAN be quite fragile, but I didn't want to optimize it for my particular puzzle so I just made sure to pre-process and make sure my pictures had optimal lighting.</p>
+        
+        <br>
+        
+        <p>For both pictures (search words and puzzle), I made sure they were aligned vertically. This can be automated by using OpenCV but I did it manually.</p>
+        <p>I also cropped the picture so only the words and letters of interest were present. Stray lines and boxes seemed to harm performance.</p>
+        <p>I used some code that I found <"a href=https://www.pyimagesearch.com/2017/07/10/using-tesseract-ocr-python/">online</a> to do thresholding and erosion of the image so Tesseract could find the letters more easily.</p>
+        
+        
+        
         <div align="left">
             <table style="width=100%">
                 <tr>
