@@ -1,3 +1,8 @@
+'''
+Credit for the bulk of the code:
+https://www.pyimagesearch.com/2017/07/10/using-tesseract-ocr-python/
+'''
+
 # import the necessary packages
 import numpy as np
 import argparse

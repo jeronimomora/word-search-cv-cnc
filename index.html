@@ -2,6 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <style>  
+
+div.space { margin-top: 450px; }
+div.small_space { margin-top: 325px; }
     div.padded {  
       padding-top: 0px;  
       padding-right: 100px;  
@@ -9,10 +12,10 @@
       padding-left: 100px;  
     }  
 div.gallery {
-    margin: 5px;
+    margin: 17px;
     border: 1px solid #ccc;
     float: left;
-    width: 180px;
+    width: 20%;
 }
 
 div.gallery:hover {
@@ -41,10 +44,14 @@ div.desc {
     <h2 align="middle">Jeronimo Mora</h2>
 
     <div class="padded">
+	
         <p>Having finished the fall semester I wanted to do a fun little project to relax. I have a 3D printer and I figured I could use it to do something interesting.
         I had some word search puzzles so I figured I could write some software to solve the puzzles and then create gcode so my 3D printer could circle the words if I attached a sharpie to it.
         It took me a few days but I got it working. There are a few changes I'd like to make in the future so this is likely a work in progress.</p>
-
+		<div align="center">
+		<iframe width="560" height="315" src="https://www.youtube.com/embed/JgW0SBVrisc" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
+		</div>
+		
     <h2 align="middle">Part 1: Word and Letter Extraction</h2>
         <p>In order to extract the letters from the pages, I needed to use some kind of character recognition software. Luckily, I stumbled upon Tesseract OCR. Tesseract OCR is character recognition software that was originally developed by HP and then managed by Google. 
             Out of the box, it has fairly strong performance so I decided that using it was preferable to training my own model. It CAN be quite fragile, but I didn't want to optimize it for my particular puzzle so I just made sure to pre-process and make sure my pictures had optimal lighting.</p>
@@ -52,8 +59,15 @@ div.desc {
         <p>For both pictures (search words and puzzle), I made sure they were aligned vertically. This can be automated by using OpenCV but I did it manually. 
         I also cropped the picture so only the words and letters of interest were present. Stray lines and boxes seemed to harm performance. 
         I used some code that I found <a href="https://www.pyimagesearch.com/2017/07/10/using-tesseract-ocr-python/">online</a> to do thresholding and erosion of the image so Tesseract could find the letters more easily.</p>
-    </div>
-        <div class="gallery">
+		
+		<p>In my Ubuntu Windows environment, the command I used to output the letters is (without quotes) "tesseract pathtofile -psm N output_filename". Where pathtofile is the path to the input file, N is a <a href="https://github.com/tesseract-ocr/tesseract/wiki/Command-Line-Usage">parameter for page segmentation modes</a>, 
+		and output_filename is what the output file will be called. I used N of 6 for the letters and 11 for the words (see link for what the parameters do). With the words and letters extracted, I was ready to solve the puzzle!</p>
+	
+	
+	</div>
+
+    <div class="padded">
+		<div class="gallery">
           <a target="_blank" href="puzzle.jpg">
             <img src="puzzle.jpg" alt="Fjords" width="300" height="200">
           </a>
@@ -66,8 +80,6 @@ div.desc {
           </a>
           <div class="desc">Fig. 2: Image after cropping and after OpenCV</div>
         </div>
-    
-        </ br>
         
         <div class="gallery">
           <a target="_blank" href="images/tesseract.PNG">
@@ -75,30 +87,73 @@ div.desc {
           </a>
           <div class="desc">Fig. 3: Tesseract result</div>
         </div>
-    </ br>
-
+	</div>
     <div class="padded">
-    <h2 align="middle">Part 2: Rasterizing single-color triangles</h2>
-        <p>Test</p>
-        <div align="left">
-            <table style="width=100%" border="1px" cellpadding="10px">
-                <tr>
-                    <td>
-                    <p>Row 1, Col 1</p>
-                    <td>
-                    <p>Row 1, Col 2</p>
-                    <td>
-                    <p>Row 1, Col 3</p>
-                <tr>
-                    <td>
-                    <p>Row 2, Col 1</p>
-                    <td>
-                    <p>Row 2, Col 2</p>
-                    <td>
-                    <p>Row 2, Col 3</p>
-                </tr>
-            </table>
+	<div class="space"></div>
+	
+	
+    <h2 align="middle">Part 2: Solving the puzzle and generating the gcode</h2>
+        <p>In order to solve the puzzle, I first import the text files generated with tesseract. I had a list that contained, in all caps, the letters of the alphabet.
+		For every character in the puzzle, I stored them in a row of an array and would increment the row number if I saw a break point ("\n"). The same was true of the words, 
+		only instead of storing them in a grid, I just kept a list of the words themselves. In order to solve the puzzle, I need a way to search for words themselves. I would like to search for words both forwards and backwards.
+		This way I only need to check four directions and never have to backtrack (right, down-right, down, down-left). I create a dictionary of words where the keys are the first or last letter of a word and a number. 
+		For all keys with 1, I would store all words, reversed, that end in a given letter. For all keys with 0, I would store all words that start with a given letter.</p>
+		
+		<p>I used a depth first search approach that would loop through all letters beginning in the top left corner. For each letter it would check to see if a word starts or ends
+		with the letter. If it did, I checked all its successors to see if the letter and its successor were in one of the words. i.e. (D-> O would be valid if DOG was a word, whereas D -> X would not be valid).
+		If the successor exists in the dictionary, I would continue checking the successors in that direction until it found a word, or a mismatch occurs. Done for all the words, this 
+		yields the path for all the words in the puzzle.</p>
+		
+		<p>Generating the gcode was simple, but tricky. I needed to find the offset of the letter centroids from the top left corner and find the x and y spacing of the letters. This was done manually for my puzzle.
+		I suppose it could be done via software but I didn't want to make this a long project. Given a path (0,1) -> (1,1) -> (2,1), I would translate the indices of the grid into real coordinates. Given some margin, I had
+		the code trace a box around the path. Once all path loops were created, I connected the loops and rotated them 90 degrees so the puzzle paper would fit on my 3D printer plate. Now I just attach my sharpie 
+		and away we go!</p>
+
+		<div class="gallery">
+          <a target="_blank" href="images/word%20search%20gcode.png">
+            <img src="images/word%20search%20gcode.png" alt="Fjords" width="400" height="400">
+          </a>
+          <div class="desc">Fig. 4: Example of generated gcode</div>
         </div>
+		
+		<div class="small_space"></div>
+		
+		<h2 align="middle">Part 3: Attaching the sharpie and drawing</h2>
+        <p>I downloaded Inventor with my student license and drew something up so I could attach a sharpie to my 3D printer. It has a slot in the side for an M3 nut to fall into. Once inside, I can thread
+		an M3 screw to use as a setscrew for the sharpie. I used my 3D printer to make it before disassembling the fan and attaching the sharpie. Once attached, I used pronterface to control the 3D printer and 
+		make a grid for me. The grid was used so I could know the placement of the puzzle as well as the offsets to use in my gcode generator. Once the puzzle was aligned and taped down, I fired up my gcode file 
+		and let it draw. I wrote software to control the printer using pyserial, but I didn't test it. It should work as the process isn't very complicated.</p>
+		
+		<div class="padded">
+		<div class="gallery">
+          <a target="_blank" href="images/Sharpie%20adapter.jpg">
+            <img src="images/Sharpie%20adapter.jpg" alt="Fjords" width="300" height="200">
+          </a>
+          <div class="desc">Fig. 5: Sharpie adapter</div>
+        </div>
+
+        <div class="gallery">
+          <a target="_blank" href="images/Buildplate%20Grid.jpg">
+            <img src="images/Buildplate%20Grid.jpg" alt="Forest" width="300" height="200">
+          </a>
+          <div class="desc">Fig. 6: Marked grid</div>
+        </div>
+        
+        <div class="gallery">
+          <a target="_blank" href="images/solving.jpg">
+            <img src="images/solving.jpg" alt="Northern Lights" width="600" height="200">
+          </a>
+          <div class="desc">Fig. 7: Solving in progress</div>
+        </div>
+		
+		<div class="gallery">
+          <a target="_blank" href="images/solved.jpg">
+            <img src="images/solved.jpg" alt="Northern Lights" width="600" height="200">
+          </a>
+          <div class="desc">Fig. 8: Solved puzzle</div>
+        </div>
+	</div>
+
     </div>
 </body>
 </html>
