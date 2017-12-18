@@ -29,41 +29,8 @@ div.desc {
     text-align: center;
 }
 </style>
-</head>
-<body>
-
-<div class="gallery">
-  <a target="_blank" href="puzzle.jpg">
-    <img src="puzzle.jpg" alt="Fjords" width="300" height="200">
-  </a>
-  <div class="desc">Add a description of the image here</div>
-</div>
-
-<div class="gallery">
-  <a target="_blank" href="images/puzzle_erode.png">
-    <img src="images/puzzle_erode.png" alt="Forest" width="300" height="200">
-  </a>
-  <div class="desc">Add a description of the image here</div>
-</div>
-
-<div class="gallery">
-  <a target="_blank" href="images/tesseract.PNG">
-    <img src="images/tesseract.PNG" alt="Northern Lights" width="300" height="200">
-  </a>
-  <div class="desc">Add a description of the image here</div>
-</div>
-
-<div class="gallery">
-  <a target="_blank" href="mountains.jpg">
-    <img src="mountains.jpg" alt="Mountains" width="300" height="200">
-  </a>
-  <div class="desc">Add a description of the image here</div>
-</div>
-
-</body>
-    
+</head>  
   
-    
 <title>3D Printer Word Search Solver Using Computer Vision and AI</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="style.css" media="screen" />
@@ -85,21 +52,27 @@ div.desc {
         <p>For both pictures (search words and puzzle), I made sure they were aligned vertically. This can be automated by using OpenCV but I did it manually. 
         I also cropped the picture so only the words and letters of interest were present. Stray lines and boxes seemed to harm performance. 
         I used some code that I found <a href="https://www.pyimagesearch.com/2017/07/10/using-tesseract-ocr-python/">online</a> to do thresholding and erosion of the image so Tesseract could find the letters more easily.</p>
+        
+        <div class="gallery">
+          <a target="_blank" href="puzzle.jpg">
+            <img src="puzzle.jpg" alt="Fjords" width="300" height="200">
+          </a>
+          <div class="desc">Fig. 1: Image after cropping and before OpenCV</div>
+        </div>
 
-        <div align="middle">
-            <table style="width=50%">
-                <tr>
-                    <img src="puzzle.jpg"/>
-                    <figcaption>Fig. 1: Image after cropping and before OpenCV</figcaption>
-                    <img src="images/puzzle_erode.png"/>
-                    <figcaption>Fig. 2: Image after cropping and after OpenCV</figcaption>
-                </tr>
-                <tr>
-                    <td align="middle">
-                    <img src="images/tesseract.PNG" height="274" width="1103" />
-                    <figcaption align="middle">Fig. 3: Tesseract result</figcaption>
-                </tr>
-            </table>
+        <div class="gallery">
+          <a target="_blank" href="images/puzzle_erode.png">
+            <img src="images/puzzle_erode.png" alt="Forest" width="300" height="200">
+          </a>
+          <div class="desc">Fig. 2: Image after cropping and after OpenCV</div>
+        </div>
+        <br>
+        
+        <div class="gallery">
+          <a target="_blank" href="images/tesseract.PNG">
+            <img src="images/tesseract.PNG" alt="Northern Lights" width="600" height="200">
+          </a>
+          <div class="desc">Fig. 3: Tesseract result</div>
         </div>
 
     <h2 align="middle">Part 2: Rasterizing single-color triangles</h2>
