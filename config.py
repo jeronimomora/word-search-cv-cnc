@@ -21,3 +21,6 @@ dxmargin = 4.5 #in mm
 dymargin = dxmargin*x_spacing/y_spacing + 0.5 #in mm
 
 feedrate = 30 # in mm per second
+
+comport = 'COM3' #Serial comport for 3D printer
+baud_rate = 115200 #3D printer baudrate

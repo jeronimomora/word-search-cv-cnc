@@ -1,4 +1,5 @@
 from generate_gcode import gcode
+from config import comport, baud_rate
 import serial
 import time
 
@@ -9,9 +10,6 @@ gcode from the gcode file and just loop through the list
 You can also just use pronterface or some other printer control software if
 you please
 '''
-
-comport = 'COM3'
-baud_rate = 115200
 
 ser = serial.Serial(comport, baud_rate, timeout=0)
 
