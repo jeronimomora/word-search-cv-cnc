@@ -41,6 +41,6 @@ If running this on a raspberry pi or controlling your 3D printer with a computer
 
 Run generate_gcode.py with the puzzle and word text files in the same directory and it should output the gcode. If you want to control your printer with a computer, run printer_control.py and the gcode should automatically generate. 
 
-NOTE: I have not tested printer_control.py, as I didn't have the time, but I suspect it should work. I used pronterface to control my printer.
+NOTE: I have not tested printer_control.py. I used pronterface to control my printer.
   
 
